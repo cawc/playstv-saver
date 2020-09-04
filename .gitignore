@@ -1,0 +1,6 @@
+.DS_Store
+out*
+video_out/
+*.log
+.vscode/
+.python-version
