@@ -1,5 +1,5 @@
 .DS_Store
-out*
+video_urls.txt*
 video_out/
 *.log
 .vscode/
