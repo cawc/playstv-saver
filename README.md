@@ -1,8 +1,6 @@
 # playstv-saver
 Python script to recover your clips from plays.tv using archive.org
 
-# Currently there's a bug so the script does not fetch the correct video urls, working on fixing that.
-
 ## Requirements
 + Python 3.7 (made using 3.7.7)
 + `pip install -r requirements.txt` (you should probably use a virtual environment)

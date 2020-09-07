@@ -26,13 +26,14 @@ def main(profile):
         os.makedirs('video_out')
     else:
         print('[!] video_out directory already exists, exiting to prevent overwriting of videos. Please move/delete the folder before running again')
+        return
 
     lines = []
     with open('video_urls.txt', 'r') as f:
         lines = f.readlines()
     
     for line in lines:
-        title, url = line.split('|')
+        title, url = line.strip().split('|')
         while True:
             print(f'[*] Downloading {title} from {url}')
             try:
@@ -59,19 +60,21 @@ def scroll_down(driver):
 
 def grab_urls(driver):
     url_elements = driver.find_elements_by_css_selector('.bd .video-list-container a.title')
-    urls = [url_element.get_attribute('href').split('?')[0] for url_element in url_elements]
+    urls = [url_element.get_attribute('href').split('?')[0] for url_element in url_elements] # grabs the non-wayback url
+    urls = [f'https://web.archive.org/web/{url}' for url in urls]
     print('[*] Done grabbing urls')
     return urls
 
 def grab_video_urls(driver, urls):
     video_urls = []
     for url in urls:
-        title = url.split('/')[-1]
+        title = f"{url.split('/')[-1]}-{url.split('/')[-2]}" # format name-id
         while True:
             try:
+                print(url)
                 driver.get(url)
                 video = driver.find_element_by_css_selector('.ui-player > video:nth-child(2)')
-                video_urls.append( (title, f"{'/'.join(video.get_attribute('poster').split('/')[:-1])}/720.mp4") )
+                video_urls.append( (title, f"https://web.archive.org/web/{'/'.join(video.get_attribute('poster').split('/')[:-1])}/720.mp4") )
                 print(f'{title} {video_urls[-1]}')
                 break
             except NoSuchElementException:
